@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import './App.css';
 
 import { CardList } from './components/card-list/card-list.component';
+import { SearchBox } from './components/search-box/search-box.component';
+
+import './App.css';
 
 class App extends Component {
   constructor() {
     super();
+
     this.state = {
       monsters: [],
       searchField: '',
@@ -18,41 +21,20 @@ class App extends Component {
       .then((users) => this.setState({ monsters: users }));
   }
 
+  onSearchChange = (event) => {
+    this.setState({ searchField: event.target.value });
+  };
+
   render() {
     const { monsters, searchField } = this.state;
-    const filteredMonsters = monsters.filter((monsters) =>
-      monsters.name.toLowerCase().includes(searchField.toLowerCase())
+    const filteredMonsters = monsters.filter((monster) =>
+      monster.name.toLowerCase().includes(searchField.toLowerCase())
     );
+
     return (
       <div className="App">
-        <nav className="navbar navbar-expand-lg navbar-light">
-          <label className="navbar-brand" htmlFor="">
-            <strong>Monsters</strong> Inc
-          </label>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <form className="form-inline my-2 my-lg-0">
-              <input
-                className="form-control mr-sm-2 "
-                type="search"
-                placeholder="Search monsters"
-                aria-label="Search"
-                onChange={(e) => this.setState({ searchField: e.target.value })}
-              />
-            </form>
-          </div>
-        </nav>
-        <h1>Monster's Yellowpages</h1>
+        <h1>Monsters Rolodex</h1>
+        <SearchBox onSearchChange={this.onSearchChange} />
         <CardList monsters={filteredMonsters} />
       </div>
     );
